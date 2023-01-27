@@ -94,7 +94,7 @@ class _DynamicSheetState extends State<DynamicSheet> with TickerProviderStateMix
         sizesBeforeRender[i] = size.height > maxSheetSize ? maxSheetSize : size.height;
       }
     } catch(e){
-      log('An unexpected error occured while measuring widget constraints before render...');
+      log('An unexpected error occurred while measuring widget constraints before render...');
     }
     return sizesBeforeRender;
   }
