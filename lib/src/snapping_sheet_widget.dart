@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dynamic_bottom_sheet/src/widget_size/size_notifier.dart';
 import 'package:dynamic_bottom_sheet/src/widget_size/widget_measurer.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +10,7 @@ import 'package:dynamic_bottom_sheet/src/sheet_position_data.dart';
 import 'package:dynamic_bottom_sheet/src/snapping_calculator.dart';
 import 'package:dynamic_bottom_sheet/src/snapping_position.dart';
 import 'package:dynamic_bottom_sheet/src/snapping_sheet_content.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class DynamicSheet extends StatefulWidget {
   final double sheetFactor;
@@ -29,9 +32,9 @@ class DynamicSheet extends StatefulWidget {
     Key? key,
     required this.sheetFactor,
     // this.sheetAbove,
-    required this.content,
     // this.grabbing = const SizedBox(),
     // this.grabbingHeight = 0,
+    required this.content,
     this.initialSnappingPosition,
     this.child,
     this.lockOverflowDrag = false,
@@ -87,20 +90,22 @@ class _DynamicSheetState extends State<DynamicSheet> with TickerProviderStateMix
     List<double> sizesBeforeRender = List.filled(widget.content.childCount, 0);
     try{
       for (int i = 0; i < widget.content.childCount; i++) {
-        final size = MeasureUtil.measureWidget(
-            MeasureUtil.wrap(widget.content.childAt(i)));
-        sizesBeforeRender[i] = size.height > maxSheetSize
-            ? maxSheetSize
-            : size.height;
+        final size = MeasureUtil.measureWidget(MeasureUtil.wrap(widget.content.childAt(i)));
+        sizesBeforeRender[i] = size.height > maxSheetSize ? maxSheetSize : size.height;
       }
-    } catch(e){}
+    } catch(e){
+      log('An unexpected error occured while measuring widget constraints before render...');
+    }
     return sizesBeforeRender;
   }
 
   double get screenSize {
-    return widget.axis == Axis.horizontal
-        ? _latestConstraints!.maxWidth
-        : _latestConstraints!.maxHeight;
+    if(_latestConstraints != null){
+      final size = widget.axis == Axis.horizontal ? _latestConstraints!.maxWidth : _latestConstraints!.maxHeight;
+      return size;
+    }
+    final size = widget.axis == Axis.horizontal ? ScreenUtil().screenWidth : ScreenUtil().screenHeight;
+    return size;
   }
 
   double get maxSheetSize {

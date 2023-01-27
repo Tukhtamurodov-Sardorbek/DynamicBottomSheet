@@ -2,26 +2,35 @@ import 'package:dynamic_bottom_sheet/src/snapping_position.dart';
 import 'package:dynamic_bottom_sheet/src/snapping_sheet_content.dart';
 import 'package:dynamic_bottom_sheet/src/snapping_sheet_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
   runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Snapping Sheet Examples',
-      theme: ThemeData(
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.grey[700],
-          elevation: 0,
-          foregroundColor: Colors.white,
-          titleTextStyle: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+    ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child){
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Snapping Sheet Examples',
+          theme: ThemeData(
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.grey[700],
+              elevation: 0,
+              foregroundColor: Colors.white,
+              titleTextStyle: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+              iconTheme: const IconThemeData(color: Colors.white),
+            ),
+            primarySwatch: Colors.grey,
           ),
-          iconTheme: const IconThemeData(color: Colors.white),
-        ),
-        primarySwatch: Colors.grey,
-      ),
-      home: const MyApp(),
+          home: child,
+        );
+      },
+      child: const MyApp(),
     ),
   );
 }
